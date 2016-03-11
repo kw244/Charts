@@ -3,32 +3,27 @@
 <head>
   <meta charset="utf-8">
   <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
   <style>
-	circle.dimple-series-1 {
-		fill: red;
-	}
-	h2 {
-		text-align: center;
-	}
+	<!--place css here -->
   
   </style>
 	
 	<script type="text/javascript">
       function draw(data) {
-      
+      "use strict";
       /*
         D3.js setup code
       */
 
           "use strict"; //enforce strict javascript. throw explicit errors when normal js would silently fail.
-          var margin = 75,
-              width = 1400 - margin,
-              height = 600 - margin;
+          var margin = 200,
+              width = 900 - margin,
+              height = 800 - margin;
 
 		
 		  var header = d3.select("body").append("h2")
-							.text("World Cup Attendance");
+							.text("Valentine's Day Spending");
           var svg = d3.select("body")
             .append("svg")
               .attr("width", width + margin)
@@ -41,15 +36,29 @@
       */
 
           var myChart = new dimple.chart(svg, data);
-          var x = myChart.addTimeAxis("x", "year"); 
-          myChart.addMeasureAxis("y", "attendance");
-		  x.dateParseFormat = "%Y";
-		  x.tickFormat = "%Y";
-		  x.timeInterval = 4;
+          myChart.setBounds(margin/2+50,margin/2+50, 0.7*width, 0.7*height);
+		  myChart.addMeasureAxis("p","Spending");
 		  
-          myChart.addSeries(null, dimple.plot.line);
-		  myChart.addSeries(null, dimple.plot.scatter);
-          myChart.draw();
+		  var ring = myChart.addSeries("Category", dimple.plot.pie);
+		  ring.innerRadius = "0%";
+		  myChart.addLegend("70%","10%","20%","40%");
+          
+		
+		//color scheme
+		myChart.defaultColors = [
+			new dimple.color("#5DA5DA"), //blue
+			new dimple.color("#60BD68"), //green
+			new dimple.color("#F17CB0"), //pink
+			new dimple.color("#B2912F"), //brown
+			new dimple.color("#B276B2"), //purple
+			new dimple.color("#DECF3F"), //yellow	
+			new dimple.color("#F15854"), //red
+		]; 
+		  
+		
+		  
+		  
+		  myChart.draw();
         };
       </script>
   </head>
@@ -59,7 +68,7 @@
     Use D3 (not dimple.js) to load the TSV file
     and pass the contents of it to the draw function
     */
-  d3.tsv("world_cup.tsv", draw);
+  d3.csv("valentines.csv", draw);
   </script>
 </body>
 </html>
